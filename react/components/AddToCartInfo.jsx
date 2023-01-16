@@ -1,5 +1,8 @@
 import React from "react";
+import { useProduct } from 'vtex.product-context'
 
 export default function AddToCartInfo() {
-    return <div>maximiliano</div>
+    const productInfo = useProduct()
+    console.log("ejemplo",productInfo)
+    return( <div>maximiliano</div>)
 }
