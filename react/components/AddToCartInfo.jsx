@@ -1,35 +1,47 @@
-import React from "react";
-import { useProduct } from 'vtex.product-context';
+import React from 'react'
+import { useProduct } from 'vtex.product-context'
 import { useOrderForm } from 'vtex.order-manager/OrderForm'
+import { generateBlockClass } from '@vtex/css-handles'
+import style from './style.css'
+import ButtonGroup from './ButtonGroup'
 
+const AddToCartInfo = ({ blockClass }) => {
+const container = generateBlockClass(style.container, blockClass)
+const container__item = generateBlockClass(style.container__item, blockClass)
 
-export default function AddToCartInfo() {
+  const productInfo = useProduct()
+  const { orderForm: {
+    items,
+    totalizers
+  } } = useOrderForm();
+  console.log("Este producto tiene esta informacion:", productInfo)
 
-  const productInfo = useProduct() // "vtex.checkout-resources": "0.x",
-
-
-  const { orderForm: { items } } = useOrderForm() //   "vtex.order-manager": "0.x": pedido que esta en el carrito
-
-  // console.log("ejemplo", productInfo)
 
   return (
-    <div>
-      {items?.map((item, index) => {
+    <div className={container}>
+      {items.map((item, index) => {
         return (
-          <div key={index}>
-            <img src={item.imageUrls.at1x} alt="" />
-            <p>{item.name}</p>
-            <p>{item.id}</p>
-            <p>S/{item.price / 100}</p>
-            <p>Cant: {item.quantity}</p>
+          <div key={index} className={container__item} >
+            <div>
+              <img src={item.imageUrls.at1x} />
+            </div>
+            <div>
+              <p>{item.name}</p>
+              <p>{item.id}</p>
+              <p>${item.price}</p>
+              <p>Cant: {item.quantity}</p>
+            </div>
           </div>
         )
       })}
       <hr />
       <div>
         <p>Tienes {items.length} productos en el carrito</p>
-        {/* <p>Total ${total}</p> */}
+        <p>Total ${totalizers[0]?.value}</p>
       </div>
+      <ButtonGroup blockClass={blockClass} />
     </div>
-    )
+  )
 }
+
+export default AddToCartInfo
